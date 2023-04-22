@@ -120,11 +120,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#square-model" id="toc-square-model" class="nav-link" data-scroll-target="#square-model">Square model</a></li>
   <li><a href="#logit-model" id="toc-logit-model" class="nav-link" data-scroll-target="#logit-model">Logit model</a></li>
   <li><a href="#fancy-logit-model" id="toc-fancy-logit-model" class="nav-link" data-scroll-target="#fancy-logit-model">Fancy logit model</a></li>
-  <li><a href="#marginal-effects-averaged-by-group" id="toc-marginal-effects-averaged-by-group" class="nav-link" data-scroll-target="#marginal-effects-averaged-by-group"><strong>Marginal effects averaged by group</strong></a></li>
-  <li><a href="#marginal-effects-at-user-specified-or-representative-values" id="toc-marginal-effects-at-user-specified-or-representative-values" class="nav-link" data-scroll-target="#marginal-effects-at-user-specified-or-representative-values">Marginal effects at <strong>user-specified or representative values</strong></a></li>
-  <li><a href="#average-marginal-effects-at-counterfactual-user-specified-values" id="toc-average-marginal-effects-at-counterfactual-user-specified-values" class="nav-link" data-scroll-target="#average-marginal-effects-at-counterfactual-user-specified-values"><strong>Average marginal effects at counterfactual user-specified values</strong></a></li>
+  <li><a href="#marginal-effects-averaged-by-group" id="toc-marginal-effects-averaged-by-group" class="nav-link" data-scroll-target="#marginal-effects-averaged-by-group">Marginal effects averaged by group</a></li>
+  <li><a href="#marginal-effects-at-user-specified-or-representative-values" id="toc-marginal-effects-at-user-specified-or-representative-values" class="nav-link" data-scroll-target="#marginal-effects-at-user-specified-or-representative-values">Marginal effects at user-specified or representative values</a></li>
+  <li><a href="#average-marginal-effects-at-counterfactual-user-specified-values" id="toc-average-marginal-effects-at-counterfactual-user-specified-values" class="nav-link" data-scroll-target="#average-marginal-effects-at-counterfactual-user-specified-values">Average marginal effects at counterfactual user-specified values</a></li>
   </ul></li>
-  <li><a href="#contrastscomparisons-as-statistical-effects-aka-incremental-effects" id="toc-contrastscomparisons-as-statistical-effects-aka-incremental-effects" class="nav-link" data-scroll-target="#contrastscomparisons-as-statistical-effects-aka-incremental-effects"><strong>Contrasts/comparisons as statistical effects (aka incremental effects)</strong></a></li>
+  <li><a href="#contrastscomparisons-as-statistical-effects-aka-incremental-effects" id="toc-contrastscomparisons-as-statistical-effects-aka-incremental-effects" class="nav-link" data-scroll-target="#contrastscomparisons-as-statistical-effects-aka-incremental-effects">Contrasts/comparisons as statistical effects (aka incremental effects)</a></li>
   <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
   </ul>
 </nav>
@@ -619,11 +619,12 @@ Confidence level used: 0.95 </code></pre>
 <p><img src="marginaleffects_emmeans_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<hr>
 <p>To make life even more exciting, we’re not limited to just average marginal effects (AMEs) or marginal effects at the mean (MEMs). Additionally, if we think back to the slider/switch/mixing board analogy, all we’ve really done so far with our logistic regression model is move one slider (<code>public_sector_corruption</code>) up and down. What happens if we move other switches and sliders at the same time?</p>
 <p>We can use both <code>marginaleffects</code> and <code>eemmeans</code> to play with our model’s full mixing board. We’ll continue to use the logistic regression model as an example since it’s sensitive to the order of averaging.</p>
 </section>
 <section id="marginal-effects-averaged-by-group" class="level3">
-<h3 class="anchored" data-anchor-id="marginal-effects-averaged-by-group"><strong>Marginal effects averaged by group</strong></h3>
+<h3 class="anchored" data-anchor-id="marginal-effects-averaged-by-group">Marginal effects averaged by group</h3>
 <p>If we have categorical covariates in our model like <code>region</code>, we can find the average marginal effect (AME) of continuous predictors across those different groups. This is fairly straightforward when working with <code>marginaleffects</code> because of its approach to averaging. Remember that with the AME, each original row gets its own fitted value and each individual slope, which we can then average and collapse into a single row. Group characteristics like region are maintained after calculating predictions, so we can calculate group averages of the individual slopes. This outlines the process:</p>
 <p><img src="images/image-22808075.png" class="img-fluid"></p>
 <div class="cell">
@@ -655,7 +656,7 @@ Confidence level used: 0.95 </code></pre>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>model_logit_fancy <span class="sc">%&gt;%</span> </span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">emtrends</span>(<span class="at">specs =</span> <span class="sc">~</span> public_sector_corruption <span class="sc">+</span> region,</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">emtrends</span>(<span class="at">specs =</span> <span class="sc">~</span> public_sector_corruption <span class="sc">|</span> region,</span>
 <span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>           <span class="at">var =</span> <span class="st">"public_sector_corruption"</span>,</span>
 <span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">regrid =</span> <span class="st">"response"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">test</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -685,7 +686,7 @@ Confidence level used: 0.95 </code></pre>
 </div>
 </section>
 <section id="marginal-effects-at-user-specified-or-representative-values" class="level3">
-<h3 class="anchored" data-anchor-id="marginal-effects-at-user-specified-or-representative-values">Marginal effects at <strong>user-specified or representative values</strong></h3>
+<h3 class="anchored" data-anchor-id="marginal-effects-at-user-specified-or-representative-values">Marginal effects at user-specified or representative values</h3>
 <p>If we want to unlock the full potential of our regression mixing board, we can feed the model any values we want. In general, we’ll (1) make a little dataset with covariate values set to either specific values that we care about, or typical or average values, (2) plug that little dataset into the the model and get fitted values, and (3) work with the results. There are a bunch of different names for this little fake dataset like “data grid” and “reference grid”, but they’re all the same idea. Here’s an overview of the approach:</p>
 <p><img src="images/image-231307562.png" class="img-fluid"></p>
 <p>Now that we have a hypothetical data grid of sliders and switches set to specific values, we can plug it into the model and generate fitted values. Importantly, doing this provides us with results that are analogous to the marginal effects at the mean (MEM) that we found earlier, and <em>not</em> the average marginal effect (AME), since we’re not feeding the entire original dataset to the model. None of these hypothetical rows exist in real life—there is no country with any of these exact combinations of corruption, polyarchy/democracy, GDP per capita, or region.</p>
@@ -765,7 +766,7 @@ Confidence level used: 0.95 </code></pre>
 </div>
 </section>
 <section id="average-marginal-effects-at-counterfactual-user-specified-values" class="level3">
-<h3 class="anchored" data-anchor-id="average-marginal-effects-at-counterfactual-user-specified-values"><strong>Average marginal effects at counterfactual user-specified values</strong></h3>
+<h3 class="anchored" data-anchor-id="average-marginal-effects-at-counterfactual-user-specified-values">Average marginal effects at counterfactual user-specified values</h3>
 <p>Calculating marginal effects at representative values is useful—plugging different values into the model while holding others constant is the best way to see how all the different moving parts of a model work, especially when there interactions, exponents, or non-linear outcomes.</p>
 <p>However, creating hypothetical predictor values on a reference grid creates hypothetical observations that might never exist in real life. This was the main difference behind the average marginal effect (AME) and the marginal effect at the mean (MEM) that we looked at earlier. Passing average predictor values into a model creates average predictions, but those averages might not reflect reality.</p>
 <p>For example, we used this data grid to look at the effect of corruption on the probability of having a campaign finance disclosure law across different regions:</p>
@@ -787,11 +788,10 @@ Confidence level used: 0.95 </code></pre>
 <p>Fortunately we can do something neat to work with observed covariate values and thus create an AME-flavored marginal effect at representative values instead of the current MEM-flavored marginal effect at representative values. Here’s the general process:</p>
 <p><img src="images/image-1162594963.png" class="img-fluid"></p>
 <p>Instead of creating a data or reference grid, we create multiple copies of our original dataset. In each copy we change the columns that we want to set to specific values and we leave all the other columns at their original values. We then feed all the copies of the dataset into the model and generate a ton of fitted values, which we <em>then</em> collapse into average effects.</p>
-<p>That sounds really complex, but it’s only a matter of adding one argument to <code>marginaleffects::datagrid()</code>. We’ll take <code>region</code> out of <code>datagrid</code> here so that we keep all the original regions—we’ll take the average across those regions after the fact.</p>
+<p>That sounds really complex, but it’s only a matter of using <code>marginaleffects::datagridcf()</code>. We’ll take <code>region</code> out of <code>datagrid</code> here so that we keep all the original regions—we’ll take the average across those regions after the fact.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>cfct_data <span class="ot">&lt;-</span> <span class="fu">datagrid</span>(<span class="at">model =</span> model_logit_fancy,</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">public_sector_corruption =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">80</span>),</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">grid_type =</span> <span class="st">"counterfactual"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>cfct_data <span class="ot">&lt;-</span> <span class="fu">datagridcf</span>(<span class="at">model =</span> model_logit_fancy,</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">public_sector_corruption =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">80</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This new data grid has twice the number of rows that we have in the original data, since there are now two copies of the data stacked together:</p>
 <div class="cell">
@@ -818,9 +818,8 @@ Confidence level used: 0.95 </code></pre>
 <p>That’s neat! These 5 countries all have their original values of polyarchy, GDP per capita, and region, but have their public sector corruption indexes set to 20 (in the first copy) and 80 (in the second copy).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>model_logit_fancy <span class="sc">%&gt;%</span> </span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slopes</span>(<span class="at">newdata =</span> <span class="fu">datagrid</span>(<span class="at">public_sector_corruption =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">80</span>),</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">grid_type =</span> <span class="st">"counterfactual"</span>),</span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">variables =</span> <span class="st">"public_sector_corruption"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slopes</span>(<span class="at">newdata =</span> <span class="fu">datagridcf</span>(<span class="at">public_sector_corruption =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">80</span>)),</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">variables =</span> <span class="st">"public_sector_corruption"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div data-pagedtable="false">
@@ -849,14 +848,14 @@ Confidence level used: 0.95 </code></pre>
 </section>
 </section>
 <section id="contrastscomparisons-as-statistical-effects-aka-incremental-effects" class="level2">
-<h2 class="anchored" data-anchor-id="contrastscomparisons-as-statistical-effects-aka-incremental-effects"><strong>Contrasts/comparisons as statistical effects (aka incremental effects)</strong></h2>
-<p>[marginal vs incremental fx]</p>
-<p>Technically speaking, a marginal effect is only a partial derivative, or a slope—not a predicted value or a difference in group means. But regression lends itself well to group means, and predictions are fundamental to calculating slopes, so both <strong>marginaleffects</strong> and <strong>emmeans</strong> are used for predictions and difference in group means (contrasts). They also use different approaches for calculating these averages, either averaging before putting values in the model (<strong>emmeans</strong>) or averaging after (<strong>marginaleffects</strong>’s default setting).</p>
+<h2 class="anchored" data-anchor-id="contrastscomparisons-as-statistical-effects-aka-incremental-effects">Contrasts/comparisons as statistical effects (aka incremental effects)</h2>
+<p>[marginal (continuous predictor) vs incremental (discrete predictor) fx]</p>
+<p>Technically speaking, a marginal effect is only a partial derivative, or a slope—not a predicted value or a difference in group means. But regression lends itself well to group means, and predictions are fundamental to calculating slopes, so both <strong>marginaleffects</strong> and <strong>emmeans</strong> are used for predictions and difference in group means (contrasts/comparisons). They also use different approaches for calculating these averages, either averaging before putting values in the model (<strong>emmeans</strong>) or averaging after (<strong>marginaleffects</strong>’s default setting).</p>
 <p>We’ve already seen two different functions for generating predictions: <code>marginaleffects::predictions()</code> and <code>emmeans::emmeans()</code>.</p>
 <p>I won’t go into a ton of detail here about the differences between the two approaches to predictions and contrasts, mostly because pretty much everything we’ve looked at so far applies to both. Instead, you should look at Vincent’s excellent vignettes for <strong>marginalmeans</strong>:</p>
 <ul>
-<li><p><a href="https://vincentarelbundock.github.io/marginaleffects/articles/mfx01_predictions.html">Adjusted predictions</a></p></li>
-<li><p><a href="https://vincentarelbundock.github.io/marginaleffects/articles/mfx02_contrasts.html">Contrasts</a></p></li>
+<li><p><a href="https://vincentarelbundock.github.io/marginaleffects/articles/predictions.html">Adjusted predictions</a></p></li>
+<li><p><a href="https://vincentarelbundock.github.io/marginaleffects/articles/comparisons.html">Contrasts/Comparisons</a></p></li>
 </ul>
 <p>And the equally excellent vignettes for <strong>emmeans</strong>:</p>
 <ul>
@@ -877,7 +876,7 @@ Confidence level used: 0.95 </code></pre>
 <p>The main takeaway from this whole post is this: <strong>If you take the average <em>before</em> plugging values into the model, you compute average marginal effects for a combination of covariates that might not actually exist in reality. If you take the average <em>after</em> plugging values into the model, each original observation reflects combinations of covariates that definitely exist in reality, so the average marginal effect reflects that reality.</strong></p>
 <p>To remember all these differences, here’s a table summarizing all their different approaches:</p>
 <p><img src="images/table.png" class="img-fluid"></p>
-<p>And here's an image with all five of the diagrams at the same time:</p>
+<p>And here’s an image with all five of the diagrams at the same time:</p>
 <p><img src="images/everything.png" class="img-fluid"></p>
 <p>Which approach is best? Who even knows. Both kinds of averaging approaches are pretty widespread.</p>
 </section>
