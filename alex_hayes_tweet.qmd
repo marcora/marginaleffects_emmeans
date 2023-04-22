@@ -1,0 +1,116 @@
+---
+title: "marginaleffects and emmeans"
+format:
+  html:
+    df-print: paged
+    toc: true
+---
+
+Source: <https://twitter.com/alexpghayes/status/1282869973006909441>
+
+See also: [https://timmastny.com/blog/tests-pairwise-categorical-mean-emmeans-contrast](https://timmastny.com/blog/tests-pairwise-categorical-mean-emmeans-contrast/)
+
+## Setup environment
+
+```{r}
+#| output: false
+library(tidyverse)
+library(broom)
+library(marginaleffects)
+library(emmeans)
+
+theme_set(theme_bw())
+```
+
+```{r}
+mtcars2 = mtcars %>%
+  rownames_to_column(var = "automobile") %>%
+  mutate(cyl = as_factor(cyl)) %>%
+  select(mpg, cyl)
+
+mtcars2
+```
+
+```{r}
+fit2 = lm(mpg ~ cyl, data = mtcars2)
+
+summary(fit2)
+```
+
+By default, stats::lm() uses treatment coding, so the intercept represents the mean of the base level of the `cyl` factor, in this case `cyl4`. if you have other covariates, you'd get the mean conditional on `cyl4` after partialing out those covariates, more or less.
+
+When the regression is like this people often want to compare means between groups like you would with an ANOVA (note that we have estimated four parameters: the intercept, `cyl6`, `cyl8`, and a variance parameter).
+
+[In this simple case of linear regression]{.underline}, we have:
+
+$$
+E[\text{mpg} \mid \text{cyl} = 4] = 26.7
+$$
+
+$$
+E[\text{mpg} \mid \text{cyl} = 6] = 26.7 + (-6.9)
+$$
+
+$$
+E[\text{mpg} \mid \text{cyl} = 8] = 26.7 + (-11.6)
+$$
+
+and [we can easily recover the group means from the parameters themselves]{.underline}.
+
+There is a very common confusion that pops up here. Because we are used to recover the conditional means from the parameters in the regression, [people often conflate the **parameters** with the **conditional means** themselves]{.underline}.
+
+(it is important to [note that the map between the parameters and the conditional mean depends on the contrast we use to turn a categorical variable into numeric variables]{.underline}. there are lots of ways to do this, each with a different interpretation!)
+
+However, this doesn't generalize to the case when there are additional terms in the regression. What should happen when there are two categorical variables? What if there's an additional continuous variable?
+
+```{r}
+mtcars3 = mtcars %>%
+  rownames_to_column(var = "automobile") %>%
+  mutate(cyl = as_factor(cyl),
+         transmission = as_factor(if_else(am == 0, "manual", "automatic"))) %>%
+  select(mpg, hp, cyl, transmission)
+
+mtcars3
+```
+
+```{r}
+fit3 = lm(mpg ~ cyl + hp + transmission, data = mtcars3)
+
+summary(fit3)
+```
+
+There is still a very natural way to compare the data points with `cyl4`, `cyl6`, and `cyl8` that we get from this regression. We **marginalize** over `hp` and `transmission`, i.e., we use all the parameters to estimate the conditional mean for each data point, and then average these for data with `cyl` = 4, 6, and 8. This is called calculating a marginal mean in the general case.
+
+There are packages that compute marginal means, e.g., `emmeans` and `marginaleffects`.
+
+```{r}
+cyl_emm = emmeans(fit3, ~ cyl)
+
+tidy(cyl_emm)
+```
+
+```{r}
+cyl_mem = marginal_means(fit3, "cyl")
+
+tidy(cyl_mem)
+```
+
+```{r}
+contrast(cyl_emm, method = "pairwise")
+```
+
+```{r}
+hypotheses(cyl_mem, hypothesis = "pairwise")
+```
+
+------------------------------------------------------------------------
+
+```{r}
+cyl_cft = avg_predictions(fit3, variables = list(cyl = unique))
+
+tidy(cyl_cft)
+```
+
+```{r}
+hypotheses(cyl_cft, hypothesis = "pairwise")
+```

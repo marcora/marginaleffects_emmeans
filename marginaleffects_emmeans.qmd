@@ -3,9 +3,12 @@ title: "marginaleffects and emmeans"
 format:
   html:
     df-print: paged
+    toc: true
 ---
 
-From: <https://www.andrewheiss.com/blog/2022/05/20/marginalia>
+Source: <https://www.andrewheiss.com/blog/2022/05/20/marginalia>
+
+See also: <https://jamanetwork.com/journals/jama/fullarticle/2728169>
 
 ## Setup environment
 
@@ -349,11 +352,13 @@ ggplot(plot_effects, aes(x = estimate * 100, y = fct_rev(type), color = type)) +
   labs(x = "Marginal effect (percentage points)", y = NULL)
 ```
 
+------------------------------------------------------------------------
+
 To make life even more exciting, we're not limited to just average marginal effects (AMEs) or marginal effects at the mean (MEMs). Additionally, if we think back to the slider/switch/mixing board analogy, all we've really done so far with our logistic regression model is move one slider (`public_sector_corruption`) up and down. What happens if we move other switches and sliders at the same time?
 
 We can use both `marginaleffects` and `eemmeans` to play with our model's full mixing board. We'll continue to use the logistic regression model as an example since it's sensitive to the order of averaging.
 
-### **Marginal effects by group**
+### Marginal effects averaged by group
 
 If we have categorical covariates in our model like `region`, we can find the average marginal effect (AME) of continuous predictors across those different groups. This is fairly straightforward when working with `marginaleffects` because of its approach to averaging. Remember that with the AME, each original row gets its own fitted value and each individual slope, which we can then average and collapse into a single row. Group characteristics like region are maintained after calculating predictions, so we can calculate group averages of the individual slopes. This outlines the process:
 
@@ -374,7 +379,7 @@ model_logit_fancy %>%
 
 ```{r}
 model_logit_fancy %>% 
-  emtrends(specs = ~ public_sector_corruption + region,
+  emtrends(specs = ~ public_sector_corruption | region,
            var = "public_sector_corruption",
            regrid = "response") %>%
   test()
@@ -388,13 +393,13 @@ model_logit_fancy %>%
   tibble()
 ```
 
-### Marginal effects at **user-specified or representative values**
+### Marginal effects at user-specified or representative values
 
-If we want to unlock the full potential of our regression mixing board, we can feed the model any values we want. In general, we\'ll (1) make a little dataset with covariate values set to either specific values that we care about, or typical or average values, (2) plug that little dataset into the the model and get fitted values, and (3) work with the results. There are a bunch of different names for this little fake dataset like \"data grid\" and \"reference grid\", but they\'re all the same idea. Here\'s an overview of the approach:
+If we want to unlock the full potential of our regression mixing board, we can feed the model any values we want. In general, we'll (1) make a little dataset with covariate values set to either specific values that we care about, or typical or average values, (2) plug that little dataset into the the model and get fitted values, and (3) work with the results. There are a bunch of different names for this little fake dataset like "data grid" and "reference grid", but they're all the same idea. Here's an overview of the approach:
 
 ![](images/image-231307562.png)
 
-Now that we have a hypothetical data grid of sliders and switches set to specific values, we can plug it into the model and generate fitted values. Importantly, doing this provides us with results that are analogous to the marginal effects at the mean (MEM) that we found earlier, and *not* the average marginal effect (AME), since we\'re not feeding the entire original dataset to the model. None of these hypothetical rows exist in real life---there is no country with any of these exact combinations of corruption, polyarchy/democracy, GDP per capita, or region.
+Now that we have a hypothetical data grid of sliders and switches set to specific values, we can plug it into the model and generate fitted values. Importantly, doing this provides us with results that are analogous to the marginal effects at the mean (MEM) that we found earlier, and *not* the average marginal effect (AME), since we're not feeding the entire original dataset to the model. None of these hypothetical rows exist in real life---there is no country with any of these exact combinations of corruption, polyarchy/democracy, GDP per capita, or region.
 
 ```{r}
 regions_to_use = c("Western Europe and North America",
@@ -442,10 +447,108 @@ model_logit_fancy %>%
 plot_predictions(model_logit_fancy, condition = c("public_sector_corruption", "region"))
 ```
 
-### **Average marginal effects at counterfactual user-specified values**
+### Average marginal effects at counterfactual user-specified values
+
+Calculating marginal effects at representative values is useful---plugging different values into the model while holding others constant is the best way to see how all the different moving parts of a model work, especially when there interactions, exponents, or non-linear outcomes.
+
+However, creating hypothetical predictor values on a reference grid creates hypothetical observations that might never exist in real life. This was the main difference behind the average marginal effect (AME) and the marginal effect at the mean (MEM) that we looked at earlier. Passing average predictor values into a model creates average predictions, but those averages might not reflect reality.
+
+For example, we used this data grid to look at the effect of corruption on the probability of having a campaign finance disclosure law across different regions:
+
+```{r}
+datagrid(model = model_logit_fancy,
+         public_sector_corruption = c(20, 80),
+         region = regions_to_use)
+```
+
+Polyarchy (democracy) and GDP per capita here are set at their dataset-level means, but that's not how the world actually works. Levels of democracy and personal wealth vary a lot by region.
+
+Western Europe is far more democratic (average polyarchy = 86.50) than the Middle East (average polyarchy = 27.44). But in our calculations for finding region-specific marginal effects, we've been using a polyarchy value of 52.74 for all the regions.
+
+Fortunately we can do something neat to work with observed covariate values and thus create an AME-flavored marginal effect at representative values instead of the current MEM-flavored marginal effect at representative values. Here's the general process:
 
 ![](images/image-1162594963.png)
 
-## **Categorical contrasts as statistical/marginal effects**
+Instead of creating a data or reference grid, we create multiple copies of our original dataset. In each copy we change the columns that we want to set to specific values and we leave all the other columns at their original values. We then feed all the copies of the dataset into the model and generate a ton of fitted values, which we *then* collapse into average effects.
 
-XXX
+That sounds really complex, but it's only a matter of using `marginaleffects::datagridcf()`. We'll take `region` out of `datagrid` here so that we keep all the original regions---we'll take the average across those regions after the fact.
+
+```{r}
+cfct_data <- datagridcf(model = model_logit_fancy,
+                      public_sector_corruption = c(20, 80))
+```
+
+This new data grid has twice the number of rows that we have in the original data, since there are now two copies of the data stacked together:
+
+```{r}
+nrow(corruption)
+nrow(cfct_data)
+```
+
+```{r}
+cfct_data[c(1:5, nrow(corruption) + 1:5),]
+```
+
+That's neat! These 5 countries all have their original values of polyarchy, GDP per capita, and region, but have their public sector corruption indexes set to 20 (in the first copy) and 80 (in the second copy).
+
+```{r}
+model_logit_fancy %>% 
+  slopes(newdata = datagridcf(public_sector_corruption = c(20, 80)),
+         variables = "public_sector_corruption")
+```
+
+Finally we can calculate group averages for each of the levels of `public_sector_corruption` to get AME-flavored effects:
+
+```{r}
+model_logit_fancy %>% 
+  slopes(newdata = datagrid(public_sector_corruption = c(20, 80),
+                            grid_type = "counterfactual"),
+         variables = "public_sector_corruption",
+         by = "public_sector_corruption")
+```
+
+## Contrasts/comparisons as statistical effects (aka incremental effects)
+
+\[marginal (continuous predictor) vs incremental (discrete predictor) fx\]
+
+Technically speaking, a marginal effect is only a partial derivative, or a slope---not a predicted value or a difference in group means. But regression lends itself well to group means, and predictions are fundamental to calculating slopes, so both **marginaleffects** and **emmeans** are used for predictions and difference in group means (contrasts/comparisons). They also use different approaches for calculating these averages, either averaging before putting values in the model (**emmeans**) or averaging after (**marginaleffects**'s default setting).
+
+We've already seen two different functions for generating predictions: `marginaleffects::predictions()` and `emmeans::emmeans()`.
+
+I won't go into a ton of detail here about the differences between the two approaches to predictions and contrasts, mostly because pretty much everything we've looked at so far applies to both. Instead, you should look at Vincent's excellent vignettes for **marginalmeans**:
+
+-   [Adjusted predictions](https://vincentarelbundock.github.io/marginaleffects/articles/predictions.html)
+
+-   [Contrasts/Comparisons](https://vincentarelbundock.github.io/marginaleffects/articles/comparisons.html)
+
+And the equally excellent vignettes for **emmeans**:
+
+-   [Prediction in emmeans](https://cran.r-project.org/web/packages/emmeans/vignettes/predictions.html)
+
+-   [Comparisons and contrasts in emmeans](https://cran.r-project.org/web/packages/emmeans/vignettes/comparisons.html)
+
+You should also check out [this Twitter thread tutorial](https://twitter.com/alexpghayes/status/1282869973006909441) by [Alex Hayes](https://www.alexpghayes.com/) on categorical contrasts and means---it's a fantastic illustration of this same process.
+
+In general, the two packages follow the same overall approach that we've seen with `slopes()` and `emtrends()`:
+
+-   Prediction and contrast functions in **marginaleffects** try to calculate predictions and averages for each row, then collapses them to single average values (either globally or for specific groups). This approach is AME-flavored (though **marginaleffects** can also do MEM-flavored operations and average first).
+
+-   Prediction and contrast functions in **emmeans** collapse values into averages first, then feeds those average values into the model to generate average predictions and means (either globally or for specific groups). This approach is MEM-flavored.
+
+## Summary
+
+Unless you're working with a linear OLS model without any fancy extra things like interactions, polynomials, logs, and so on, **don't try to talk about marginal effects based on just the output of a regression table---it's not possible unless you do a lot of manual math!**
+
+Both **marginaleffects** and **emmeans** provide all sorts of neat and powerful ways to calculate marginal effects without needing to resort to calculus, but as we've seen here, there are some subtle and extremely important differences in how they calculate their different effects.
+
+The main takeaway from this whole post is this: **If you take the average *before* plugging values into the model, you compute average marginal effects for a combination of covariates that might not actually exist in reality. If you take the average *after* plugging values into the model, each original observation reflects combinations of covariates that definitely exist in reality, so the average marginal effect reflects that reality.**
+
+To remember all these differences, here's a table summarizing all their different approaches:
+
+![](images/table.png)
+
+And here's an image with all five of the diagrams at the same time:
+
+![](images/everything.png)
+
+Which approach is best? Who even knows. Both kinds of averaging approaches are pretty widespread.
