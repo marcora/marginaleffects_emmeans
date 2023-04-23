@@ -8,8 +8,6 @@ format:
 
 Source: <https://twitter.com/alexpghayes/status/1282869973006909441>
 
-See also: [https://timmastny.com/blog/tests-pairwise-categorical-mean-emmeans-contrast](https://timmastny.com/blog/tests-pairwise-categorical-mean-emmeans-contrast/)
-
 ## Setup environment
 
 ```{r}
