@@ -14,10 +14,12 @@ Source: <https://twitter.com/alexpghayes/status/1282869973006909441>
 #| output: false
 library(tidyverse)
 library(broom)
-library(marginaleffects)
-library(emmeans)
+library(marginaleffects) # https://vincentarelbundock.github.io/marginaleffects/
+library(emmeans) # https://github.com/rvlenth/emmeans
+library(ggeffects) # https://strengejacke.github.io/ggeffects/
+library(modelbased) # https://easystats.github.io/modelbased/
 
-theme_set(theme_bw())
+theme_set(see::theme_modern())
 ```
 
 ```{r}
@@ -94,11 +96,29 @@ tidy(cyl_mem)
 ```
 
 ```{r}
+cyl_ggp = ggpredict(fit3, terms = "cyl")
+
+cyl_ggp
+```
+
+```{r}
+estimate_means(fit3)
+```
+
+```{r}
 contrast(cyl_emm, method = "pairwise")
 ```
 
 ```{r}
 hypotheses(cyl_mem, hypothesis = "pairwise")
+```
+
+```{r}
+hypothesis_test(cyl_ggp)
+```
+
+```{r}
+estimate_contrasts(fit3)
 ```
 
 ------------------------------------------------------------------------
