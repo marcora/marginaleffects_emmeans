@@ -1,0 +1,55 @@
+---
+title: "marginaleffects and emmeans"
+format:
+  html:
+    df-print: paged
+    toc: true
+---
+
+## Setup environment
+
+```{r}
+#| output: false
+library(tidyverse)
+library(broom)
+library(marginaleffects)
+library(modelsummary)
+library(emmeans)
+library(wooldridge)
+
+theme_set(theme_bw())
+```
+
+## Linear probability, probit, and logit regression models
+
+```{r}
+data(card)
+
+datasummary_skim(card)
+```
+
+```{r}
+lm(IQ ~ black, data = card) %>% tidy()
+```
+
+```{r}
+lpm = lm(enroll ~ nearc2 + nearc4 + fatheduc + motheduc + IQ + black, data = card)
+probit = glm(enroll ~ nearc2 + nearc4 + fatheduc + motheduc + IQ + black, data = card, family = binomial(link = "probit"))
+logit = glm(enroll ~ nearc2 + nearc4 + fatheduc + motheduc + IQ + black, data = card, family = binomial(link = "logit"))
+```
+
+```{r}
+modelsummary(list("lpm" = lpm, "probit" = probit, "logit" = logit), statistic = "p.value", stars = TRUE)
+```
+
+```{r}
+avg_comparisons(lpm)
+```
+
+```{r}
+avg_comparisons(probit)
+```
+
+```{r}
+avg_comparisons(logit)
+```
