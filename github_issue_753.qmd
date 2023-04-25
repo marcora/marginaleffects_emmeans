@@ -1,0 +1,68 @@
+---
+title: "GitHub issue #753"
+format:
+  html:
+    df-print: paged
+---
+
+```{r}
+library(marginaleffects)
+library(emmeans)
+
+load(url("https://github.com/vincentarelbundock/modelarchive/raw/main/data-raw/gusto.rda"))
+
+mod = glm(
+  day30 ~ tx * sex + age,
+  family = "binomial",
+  data = gusto)
+
+emm = emmeans(mod, ~ tx + sex)
+
+contrast(emm, interaction = list(tx = "revpairwise", sex = "trt.vs.ctrl"))
+```
+
+```{r}
+mm = marginal_means(mod,
+                    type = "link",
+                    cross = TRUE,
+                    variables = c("tx", "sex"))
+
+tidy(mm)
+```
+
+```{r}
+hypotheses(mm,
+           hypothesis = "(b6 - b4) - (b5 - b3) = 0") # tPA - SK : female - male
+```
+
+```{r}
+cmp = avg_comparisons(
+  mod,
+  type = "link",
+  variables = list("tx" = "pairwise"),
+  by = "sex"
+) 
+
+tidy(cmp)
+```
+
+```{r}
+rbind(
+  cmp |> hypotheses(hypothesis = "b2 - b1 = 0"),
+  cmp |> hypotheses(hypothesis = "b4 - b3 = 0"),
+  cmp |> hypotheses(hypothesis = "b6 - b5 = 0")
+) |> tidy()
+
+# hypotheses(cmp, hypothesis = "b4 - b3 = 0") # tPA - SK : female - male
+```
+
+```{r}
+avg_comparisons(
+  mod,
+  type = "link",
+  variables = list("tx" = "pairwise"),
+  by = "sex",
+  hypothesis = "revpairwise") |> tidy()
+
+# rowid 4 -> tPA - SK : female - male
+```

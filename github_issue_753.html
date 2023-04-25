@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>GitHub issue #753</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="github_issue_753_files/libs/clipboard/clipboard.min.js"></script>
+<script src="github_issue_753_files/libs/quarto-html/quarto.js"></script>
+<script src="github_issue_753_files/libs/quarto-html/popper.min.js"></script>
+<script src="github_issue_753_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="github_issue_753_files/libs/quarto-html/anchor.min.js"></script>
+<link href="github_issue_753_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="github_issue_753_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="github_issue_753_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="github_issue_753_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="github_issue_753_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+<link href="github_issue_753_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="github_issue_753_files/libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">GitHub issue #753</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">load</span>(<span class="fu">url</span>(<span class="st">"https://github.com/vincentarelbundock/modelarchive/raw/main/data-raw/gusto.rda"</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>mod <span class="ot">=</span> <span class="fu">glm</span>(</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  day30 <span class="sc">~</span> tx <span class="sc">*</span> sex <span class="sc">+</span> age,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">family =</span> <span class="st">"binomial"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> gusto)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>emm <span class="ot">=</span> <span class="fu">emmeans</span>(mod, <span class="sc">~</span> tx <span class="sc">+</span> sex)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="fu">contrast</span>(emm, <span class="at">interaction =</span> <span class="fu">list</span>(<span class="at">tx =</span> <span class="st">"revpairwise"</span>, <span class="at">sex =</span> <span class="st">"trt.vs.ctrl"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> tx_revpairwise sex_trt.vs.ctrl estimate     SE  df z.ratio p.value
+ SK - (SK+tPA)  female - male    -0.1217 0.0998 Inf  -1.220  0.2225
+ tPA - (SK+tPA) female - male    -0.0781 0.1179 Inf  -0.663  0.5074
+ tPA - SK       female - male     0.0436 0.1028 Inf   0.424  0.6716
+
+Results are given on the log odds ratio (not the response) scale. </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>mm <span class="ot">=</span> <span class="fu">marginal_means</span>(mod,</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">type =</span> <span class="st">"link"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">cross =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"tx"</span>, <span class="st">"sex"</span>))</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(mm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["estimate"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["conf.low"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["conf.high"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["rowid"],"name":[7],"type":["int"],"align":["right"]},{"label":["tx"],"name":[8],"type":["fct"],"align":["left"]},{"label":["sex"],"name":[9],"type":["fct"],"align":["left"]},{"label":["age"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["day30"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["wts"],"name":[12],"type":["dbl"],"align":["right"]}],"data":[{"1":"-3.095","2":"0.05330","3":"-58.07","4":"0","5":"-3.200","6":"-2.991","7":"1","8":"SK+tPA","9":"male","10":"60.9","11":"0.06983","12":"1"},{"1":"-2.699","2":"0.06762","3":"-39.92","4":"0","5":"-2.832","6":"-2.567","7":"2","8":"SK+tPA","9":"female","10":"60.9","11":"0.06983","12":"1"},{"1":"-2.990","2":"0.03800","3":"-78.67","4":"0","5":"-3.064","6":"-2.915","7":"3","8":"SK","9":"male","10":"60.9","11":"0.06983","12":"1"},{"1":"-2.715","2":"0.05088","3":"-53.36","4":"0","5":"-2.815","6":"-2.615","7":"4","8":"SK","9":"female","10":"60.9","11":"0.06983","12":"1"},{"1":"-3.196","2":"0.05551","3":"-57.57","4":"0","5":"-3.304","6":"-3.087","7":"5","8":"tPA","9":"male","10":"60.9","11":"0.06983","12":"1"},{"1":"-2.878","2":"0.07056","3":"-40.78","4":"0","5":"-3.016","6":"-2.739","7":"6","8":"tPA","9":"female","10":"60.9","11":"0.06983","12":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hypotheses</span>(mm,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>           <span class="at">hypothesis =</span> <span class="st">"(b6 - b4) - (b5 - b3) = 0"</span>) <span class="co"># tPA - SK : female - male</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["conf.low"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["conf.high"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"(b6-b4)-(b5-b3)=0","2":"0.04356","3":"0.1028","4":"0.4239","5":"0.6716","6":"-0.1578","7":"0.245"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>cmp <span class="ot">=</span> <span class="fu">avg_comparisons</span>(</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  mod,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"link"</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">variables =</span> <span class="fu">list</span>(<span class="st">"tx"</span> <span class="ot">=</span> <span class="st">"pairwise"</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">"sex"</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>) </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">tidy</span>(cmp)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":["contrast"],"name":[2],"type":["chr"],"align":["left"]},{"label":["sex"],"name":[3],"type":["labelled"],"align":["right"]},{"label":["estimate"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["conf.low"],"name":[8],"type":["dbl"],"align":["right"]},{"label":["conf.high"],"name":[9],"type":["dbl"],"align":["right"]},{"label":["predicted"],"name":[10],"type":["dbl"],"align":["right"]},{"label":["predicted_hi"],"name":[11],"type":["dbl"],"align":["right"]},{"label":["predicted_lo"],"name":[12],"type":["dbl"],"align":["right"]}],"data":[{"1":"tx","2":"mean(SK) - mean(SK+tPA)","3":"male","4":"0.10576","5":"0.06231","6":"1.6972","7":"0.08966","8":"-0.01637","9":"0.227886","10":"-6.373","11":"-6.373","12":"-6.479"},{"1":"tx","2":"mean(SK) - mean(SK+tPA)","3":"female","4":"-0.01596","5":"0.07794","6":"-0.2047","7":"0.83778","8":"-0.16872","9":"0.136801","10":"-5.805","11":"-5.821","12":"-5.805"},{"1":"tx","2":"mean(tPA) - mean(SK)","3":"male","4":"-0.20593","5":"0.06421","6":"-3.2073","7":"0.00134","8":"-0.33177","9":"-0.080084","10":"-6.373","11":"-6.579","12":"-6.373"},{"1":"tx","2":"mean(tPA) - mean(SK)","3":"female","4":"-0.16236","5":"0.08025","6":"-2.0233","7":"0.04304","8":"-0.31964","9":"-0.005085","10":"-5.805","11":"-5.984","12":"-5.821"},{"1":"tx","2":"mean(tPA) - mean(SK+tPA)","3":"male","4":"-0.10017","5":"0.07410","6":"-1.3517","7":"0.17646","8":"-0.24541","9":"0.045073","10":"-6.373","11":"-6.579","12":"-6.479"},{"1":"tx","2":"mean(tPA) - mean(SK+tPA)","3":"female","4":"-0.17832","5":"0.09170","6":"-1.9446","7":"0.05182","8":"-0.35805","9":"0.001408","10":"-5.805","11":"-5.984","12":"-5.805"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  cmp <span class="sc">|&gt;</span> <span class="fu">hypotheses</span>(<span class="at">hypothesis =</span> <span class="st">"b2 - b1 = 0"</span>),</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  cmp <span class="sc">|&gt;</span> <span class="fu">hypotheses</span>(<span class="at">hypothesis =</span> <span class="st">"b4 - b3 = 0"</span>),</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  cmp <span class="sc">|&gt;</span> <span class="fu">hypotheses</span>(<span class="at">hypothesis =</span> <span class="st">"b6 - b5 = 0"</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["conf.low"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["conf.high"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"b2-b1=0","2":"-0.12171","3":"0.09978","4":"-1.2198","5":"0.2225","6":"-0.3173","7":"0.07386"},{"1":"b4-b3=0","2":"-0.07815","3":"0.11790","4":"-0.6629","5":"0.5074","6":"-0.3092","7":"0.15293"},{"1":"b6-b5=0","2":"0.04356","3":"0.10276","4":"0.4239","5":"0.6716","6":"-0.1578","7":"0.24497"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># hypotheses(cmp, hypothesis = "b4 - b3 = 0") # tPA - SK : female - male</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">avg_comparisons</span>(</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  mod,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">type =</span> <span class="st">"link"</span>,</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">variables =</span> <span class="fu">list</span>(<span class="st">"tx"</span> <span class="ot">=</span> <span class="st">"pairwise"</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">"sex"</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">hypothesis =</span> <span class="st">"revpairwise"</span>) <span class="sc">|&gt;</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["term"],"name":[1],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["std.error"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["statistic"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["p.value"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["conf.low"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["conf.high"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"(mean(SK) - mean(SK+tPA), female) - (mean(SK) - mean(SK+tPA), male)","2":"-0.12171","3":"0.09978","4":"-1.2198","5":"0.222549","6":"-0.3173","7":"0.073859"},{"1":"(mean(tPA) - mean(SK), female) - (mean(SK) - mean(SK+tPA), female)","2":"-0.14641","3":"0.12891","4":"-1.1357","5":"0.256087","6":"-0.3991","7":"0.106261"},{"1":"(mean(tPA) - mean(SK), female) - (mean(SK) - mean(SK+tPA), male)","2":"-0.26812","3":"0.10161","4":"-2.6387","5":"0.008321","6":"-0.4673","7":"-0.068970"},{"1":"(mean(tPA) - mean(SK), female) - (mean(tPA) - mean(SK), male)","2":"0.04356","3":"0.10276","4":"0.4239","5":"0.671618","6":"-0.1578","7":"0.244967"},{"1":"(mean(tPA) - mean(SK), female) - (mean(tPA) - mean(SK+tPA), female)","2":"0.01596","3":"0.07794","4":"0.2047","5":"0.837775","6":"-0.1368","7":"0.168716"},{"1":"(mean(tPA) - mean(SK), female) - (mean(tPA) - mean(SK+tPA), male)","2":"-0.06219","3":"0.10923","4":"-0.5694","5":"0.569088","6":"-0.2763","7":"0.151889"},{"1":"(mean(tPA) - mean(SK), male) - (mean(SK) - mean(SK+tPA), female)","2":"-0.18997","3":"0.10098","4":"-1.8812","5":"0.059945","6":"-0.3879","7":"0.007954"},{"1":"(mean(tPA) - mean(SK), male) - (mean(SK) - mean(SK+tPA), male)","2":"-0.31168","3":"0.10256","4":"-3.0390","5":"0.002374","6":"-0.5127","7":"-0.110665"},{"1":"(mean(tPA) - mean(SK), male) - (mean(tPA) - mean(SK+tPA), female)","2":"-0.02761","3":"0.11194","4":"-0.2466","5":"0.805205","6":"-0.2470","7":"0.191785"},{"1":"(mean(tPA) - mean(SK), male) - (mean(tPA) - mean(SK+tPA), male)","2":"-0.10576","3":"0.06231","4":"-1.6972","5":"0.089656","6":"-0.2279","7":"0.016372"},{"1":"(mean(tPA) - mean(SK+tPA), female) - (mean(SK) - mean(SK+tPA), female)","2":"-0.16236","3":"0.08025","4":"-2.0233","5":"0.043039","6":"-0.3196","7":"-0.005085"},{"1":"(mean(tPA) - mean(SK+tPA), female) - (mean(SK) - mean(SK+tPA), male)","2":"-0.28408","3":"0.11088","4":"-2.5621","5":"0.010403","6":"-0.5014","7":"-0.066765"},{"1":"(mean(tPA) - mean(SK+tPA), female) - (mean(tPA) - mean(SK+tPA), male)","2":"-0.07815","3":"0.11790","4":"-0.6629","5":"0.507420","6":"-0.3092","7":"0.152929"},{"1":"(mean(tPA) - mean(SK+tPA), male) - (mean(SK) - mean(SK+tPA), female)","2":"-0.08421","3":"0.10755","4":"-0.7830","5":"0.433606","6":"-0.2950","7":"0.126574"},{"1":"(mean(tPA) - mean(SK+tPA), male) - (mean(SK) - mean(SK+tPA), male)","2":"-0.20593","3":"0.06421","4":"-3.2073","5":"0.001340","6":"-0.3318","7":"-0.080084"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># rowid 4 -&gt; tPA - SK : female - male</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
