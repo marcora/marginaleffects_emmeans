@@ -27,7 +27,7 @@ mm = marginal_means(mod,
                     cross = TRUE,
                     variables = c("tx", "sex"))
 
-tidy(mm)
+as.data.frame(mm)
 ```
 
 ```{r}
@@ -43,7 +43,7 @@ cmp = avg_comparisons(
   by = "sex"
 ) 
 
-tidy(cmp)
+cmp
 ```
 
 ```{r}
@@ -51,7 +51,7 @@ rbind(
   cmp |> hypotheses(hypothesis = "b2 - b1 = 0"),
   cmp |> hypotheses(hypothesis = "b4 - b3 = 0"),
   cmp |> hypotheses(hypothesis = "b6 - b5 = 0")
-) |> tidy()
+) |> as.data.frame()
 
 # hypotheses(cmp, hypothesis = "b4 - b3 = 0") # tPA - SK : female - male
 ```
@@ -62,7 +62,7 @@ avg_comparisons(
   type = "link",
   variables = list("tx" = "pairwise"),
   by = "sex",
-  hypothesis = "revpairwise") |> tidy()
+  hypothesis = "revpairwise") |> as.data.frame()
 
 # rowid 4 -> tPA - SK : female - male
 ```
