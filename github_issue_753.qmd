@@ -66,3 +66,7 @@ avg_comparisons(
 
 # rowid 4 -> tPA - SK : female - male
 ```
+
+```{r}
+sessioninfo::session_info()
+```

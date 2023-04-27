@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>A beginner’s guide to marginal effects</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="beginner_files/libs/clipboard/clipboard.min.js"></script>
+<script src="beginner_files/libs/quarto-html/quarto.js"></script>
+<script src="beginner_files/libs/quarto-html/popper.min.js"></script>
+<script src="beginner_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="beginner_files/libs/quarto-html/anchor.min.js"></script>
+<link href="beginner_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="beginner_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="beginner_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="beginner_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="beginner_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+<link href="beginner_files/libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="beginner_files/libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">A beginner’s guide to marginal effects</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>source: <a href="https://data.library.virginia.edu/a-beginners-guide-to-marginal-effects/" class="uri">https://data.library.virginia.edu/a-beginners-guide-to-marginal-effects/</a></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(margins)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(emmeans)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(marginaleffects)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>What are <em>average marginal effects</em>? If we unpack the phrase, it looks like we have <em>effects</em> that are <em>marginal</em> to something, all of which we <em>average</em>. So let's look at each piece of this phrase and see if we can help you get a better handle on this topic.</p>
+<p>To begin we simulate some toy data and plot it. Below we use <code>set.seed(1)</code> to ensure you can simulate the same data in case you want to follow along. Next we simulate 20 random values from a uniform distribution ranging from -5 to 10 and sort in ascending order. After that we simulate y as a polynomial function of x and add some random "noise" from a Normal distribution with mean 0 and standard deviation 3. Finally we put the data in a data frame and plot the data. We can see it looks like a parabola. We chose this shape to help us better explain the idea of marginal effects.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">sort</span>(<span class="fu">runif</span>(<span class="dv">20</span>, <span class="sc">-</span><span class="dv">5</span>, <span class="dv">10</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fl">1.5</span> <span class="sc">+</span> <span class="dv">3</span><span class="sc">*</span>x <span class="sc">-</span> <span class="fl">0.5</span><span class="sc">*</span>x<span class="sc">^</span><span class="dv">2</span> <span class="sc">+</span> <span class="fu">rnorm</span>(<span class="dv">20</span>, <span class="at">sd =</span> <span class="dv">3</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">x =</span> x)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y <span class="sc">~</span> x, <span class="at">data =</span> d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="beginner_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Now let's fit a linear model to the data. This is easy to do since we simulated the data. We know the functional form of the data simulation process so we can fit the "correct" model. Below we model y as a function of <code>x</code> and <code>x^2</code>. We use the <code>I()</code> function to tell R to actually square x. (The <code>^</code> symbol has a special meaning in <a href="https://stat.ethz.ch/R-manual/R-devel/library/stats/html/formula.html">R's formula syntax</a>.) The summary output reveals that our fitted model coefficients are very close to the "true" values we used to simulate the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> x <span class="sc">+</span> <span class="fu">I</span>(x<span class="sc">^</span><span class="dv">2</span>), <span class="at">data =</span> d)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = y ~ x + I(x^2), data = d)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-7.372 -0.809  0.359  2.103  4.004 
+
+Coefficients:
+            Estimate Std. Error t value     Pr(&gt;|t|)    
+(Intercept)   2.2596     0.9616    2.35        0.031 *  
+x             2.9813     0.3286    9.07 0.0000000632 ***
+I(x^2)       -0.5184     0.0456  -11.37 0.0000000023 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.12 on 17 degrees of freedom
+Multiple R-squared:  0.885, Adjusted R-squared:  0.872 
+F-statistic: 65.6 on 2 and 17 DF,  p-value: 0.0000000101</code></pre>
+</div>
+</div>
+<p>And now let's plot the fitted line to the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y <span class="sc">~</span> x, <span class="at">data =</span> d)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">fitted</span>(m))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="beginner_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>To help explain marginal effects, let's first calculate them for x in our model. For this we'll use the margins package. You can see below it's pretty easy to do. Just load the package, call the <code>margins()</code> function on the model, and specify which variable(s) you want to calculate the average marginal effect for.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>mfx <span class="ot">&lt;-</span> <span class="fu">margins</span>(m, <span class="at">variables =</span> <span class="st">"x"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mfx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["factor"],"name":[1],"type":["chr"],"align":["left"]},{"label":["AME"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["SE"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["z"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["p"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["lower"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["upper"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"x","2":"-0.4684","3":"0.168","4":"-2.788","5":"0.005303","6":"-0.7977","7":"-0.1391","_rn_":"1","_row":"x"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>What are we looking at? What does -0.468 mean? It's labeled AME, so it's the average marginal effect. But what does it mean exactly?</p>
+<p>To help answer this let's look at the mfx object we created. It's a date frame with eight columns and the same number of rows as our data set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(mfx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 20  8</code></pre>
+</div>
+</div>
+<p>The names of the columns are as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(mfx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "y"          "x"          "fitted"     "se.fitted"  "dydx_x"    
+[6] "Var_dydx_x" "_weights"   "_at_number"</code></pre>
+</div>
+</div>
+<p>The columns "y" and "x" are the original data we simulated. The "fitted" column is the fitted "y" value for the model at "x". These are the y coordinates in the fitted line in the plot above. The "se.fitted" column is the standard error for the fitted value and quantifies the uncertainty in our fitted values. (We can disregard the "_weights" and "_at_number" columns for this example.)</p>
+<p>Now what about the columns with "dydx" in the names? The column "dydx_x" contains the <em>instantaneous effect</em> of "x" on "y". The "dydx" refers to "derivatives" which you may remember from calculus. We often see "dydx" expressed mathematically as <span class="math inline">\(\frac{dx}{dy}\)</span>. It is usually described as the "instantaneous rate of change of y with respect to x." The visualization of this idea is to plot the slope of a tangent line at y. The slope of the line might be interpreted as the effect of "x" on "y" at that instant in time.</p>
+<p>Let's look at the first row in mfx. (Notice we have to use <code>as.data.frame()</code> on mfx in order to use indexing brackets. In general that's not necessary for data frames, but in this case we need it due to a print method that the margins package has for objects produced by the <code>margins()</code> function.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(mfx)[<span class="dv">1</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["y"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["x"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["fitted"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["se.fitted"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["dydx_x"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["Var_dydx_x"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["_weights"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["_at_number"],"name":[8],"type":["int"],"align":["right"]}],"data":[{"1":"-14.48","2":"-4.073","3":"-18.48","4":"2.1","5":"7.204","6":"0.02823","7":"NA","8":"1","_rn_":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>The "dydx_x" value of 7.2 is the estimated instantaneous effect of "x" on "y" when "x" is -4.07. 7.2 is the slope of the tangent line passing through the fitted "y" value of -18.48.</p>
+<p>We can draw this tangent line in R with a little of bit of extra effort. Instead of the first row, let's use the fifth so we can easily see the tangent line. To draw this line we need the slope and intercept, the latter of which we can derive from the <a href="https://www.mathsisfun.com/algebra/line-equation-point-slope.html">point-slope formula</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># fifth data point</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>x5 <span class="ot">&lt;-</span> mfx<span class="sc">$</span>x[<span class="dv">5</span>]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># slope of tangent line at 5th data point</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> mfx<span class="sc">$</span>dydx_x[<span class="dv">5</span>]</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co"># y coordinate of tangent point at 5th data point</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>y5 <span class="ot">&lt;-</span> mfx<span class="sc">$</span>fitted[<span class="dv">5</span>]</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># point slope formula</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co"># (y - y5) = b(x - x5)</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co"># add tangent line</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(y <span class="sc">~</span> x, <span class="at">data =</span> d)</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(x, <span class="fu">fitted</span>(m))</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">a =</span> b<span class="sc">*-</span>x5 <span class="sc">+</span> y5, <span class="at">b =</span> b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="beginner_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The tangent line above shows the instantaneous effect of "x" on "y". If we slam the breaks on "x" but "y" keeps going, that line represents its trajectory. And notice the line is on the <em>exterior</em> of the fitted line and is thus <em>marginal</em> to the fit. Hence the term "marginal effect".</p>
+<p>So "dydx" is the marginal effect (ie, the slope of the tangent line at the xy coordinate). How was "dydx" calculated? The quick answer is "using differential calculus". <a href="https://www.mathsisfun.com/calculus/derivatives-rules.html">This page</a> has a nice review of basic derivative rules. Here's how we do it for our toy model.</p>
+<p>Our fitted model is</p>
+<p><span class="math display">\[
+y = 2.25 + 2.98 x - 0.51 x^2
+\]</span></p>
+<p>The coefficients are from the model summary above.</p>
+<p>Taking the derivative of y with respect to x produces</p>
+<p><span class="math display">\[
+\frac{dx}{dy} = 2.98 + 2(-0.51) x
+\]</span></p>
+<p>So to calculate the "dydx" values we can do the following (showing only the first six values):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># m$coefficients[2] = 2.98</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># m$coefficients[3] = -0.51</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(m<span class="sc">$</span>coefficients[<span class="dv">2</span>] <span class="sc">+</span> <span class="dv">2</span> <span class="sc">*</span> m<span class="sc">$</span>coefficients[<span class="dv">3</span>] <span class="sc">*</span> d<span class="sc">$</span>x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.204 5.419 5.029 4.962 4.036 2.378</code></pre>
+</div>
+</div>
+<p>We can confirm these match the "dydx" column in the mfx data frame:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(mfx<span class="sc">$</span>dydx_x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 7.204 5.419 5.029 4.962 4.036 2.378</code></pre>
+</div>
+</div>
+<p>Now let's take the average of these "dydx" values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(mfx<span class="sc">$</span>dydx_x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -0.4684</code></pre>
+</div>
+</div>
+<p>And there it is, our <em>average marginal effect</em>. It is literally the average of the marginal effects. Stated another way, it is the average of the slopes of the tangent lines at 20 different xy coordinates. Is this useful? Probably not in this case. The effect of x changes as itself changes. The average of all these effects doesn't tell us much. We're better off just looking at our original plot with the fitted line.</p>
+<p>A better approach may be to examine marginal effects at <em>representative values</em>. For example, what if we were interested in the marginal effects at x = -1 and x = 6? We can use the <code>at</code> argument to specify at which x values to calculate the marginal effects. These need to specified as a list object.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mfx2 <span class="ot">&lt;-</span> <span class="fu">margins</span>(m, <span class="at">variables =</span> <span class="st">"x"</span>, </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">at =</span> <span class="fu">list</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">6</span>)))</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mfx2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["factor"],"name":[1],"type":["chr"],"align":["left"]},{"label":["x"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["AME"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["SE"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["z"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["p"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["lower"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["upper"],"name":[8],"type":["dbl"],"align":["right"]}],"data":[{"1":"x","2":"-1","3":"4.018","4":"0.4098","5":"9.804","6":"0.0000000000000000000001081509","7":"3.215","8":"4.821","_rn_":"1"},{"1":"x","2":"6","3":"-3.239","4":"0.3123","5":"-10.370","6":"0.0000000000000000000000003391","7":"-3.851","8":"-2.627","_rn_":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>Now we have two measures of the effect of "x". When x = -1, we can imagine a tangent line with a positive slope of about 4. When x = 6, we can imagine a tangent line with a negative slope of about -3.2. The summary output provides 95% confidence intervals on these estimates in the "lower" and "upper" columns.</p>
+<p>Now let's look at marginal effects from another angle, this time in the context of more realistic data. The following data are used in the paper "<a href="https://www.stata-journal.com/article.html?article=st0260">Using the margins command to estimate and interpret adjusted predictions and marginal effects</a>" by Richard Williams, published in <em>The Stata Journal</em>. It is <a href="https://www.cdc.gov/nchs/nhanes/index.htm">NHANES</a> data available from the Stata Press web site. We load the haven package so we can import Stata DTA files using the <code>read_dta()</code> function. We also subset the data to get complete cases on six variables of interest. We do this to match what was done in the paper. Notice we use base R's native pipe to send the output of <code>read_dta()</code> directly into the <code>subset</code> function. We also convert the "black" and "female" variables to factor.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>nhanes2f <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">"http://www.stata-press.com/data/r12/nhanes2f.dta"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">subset</span>(<span class="fu">complete.cases</span>(diabetes, black, female, age),</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">select =</span> <span class="fu">c</span>(diabetes, black, female, age))</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>nhanes2f<span class="sc">$</span>black <span class="ot">&lt;-</span> <span class="fu">factor</span>(nhanes2f<span class="sc">$</span>black)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>nhanes2f<span class="sc">$</span>female <span class="ot">&lt;-</span> <span class="fu">factor</span>(nhanes2f<span class="sc">$</span>female)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The variables we have are as follows:</p>
+<ul>
+<li><p>diabetes: does the subject have diabetes? 1 = yes, 0 = no</p></li>
+<li><p>black: is the subject's race black? 1 = yes, 0 = no</p></li>
+<li><p>female: is the subject female? 1 = yes, 0 = no</p></li>
+<li><p>age: age of the subject in years</p></li>
+</ul>
+<p>Now let's reproduce some results in the paper. First we model the presence of diabetes as function of "black", "female", and "age" using binary logistic regression.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>m2 <span class="ot">&lt;-</span> <span class="fu">glm</span>(diabetes <span class="sc">~</span> black <span class="sc">+</span> female <span class="sc">+</span> age, </span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">data =</span> nhanes2f, <span class="at">family =</span> binomial)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = diabetes ~ black + female + age, family = binomial, 
+    data = nhanes2f)
+
+Coefficients:
+            Estimate Std. Error z value             Pr(&gt;|z|)    
+(Intercept) -6.40544    0.23722  -27.00 &lt; 0.0000000000000002 ***
+black1       0.71790    0.12681    5.66          0.000000015 ***
+female1      0.15456    0.09430    1.64                  0.1    
+age          0.05947    0.00373   15.93 &lt; 0.0000000000000002 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 3998.1  on 10334  degrees of freedom
+Residual deviance: 3624.0  on 10331  degrees of freedom
+AIC: 3632
+
+Number of Fisher Scoring iterations: 7</code></pre>
+</div>
+</div>
+<p>Before we get to marginal effects, let's briefly interpret this model. The Residual deviance, 3624, is much lower than the Null deviance, 3998, which tells us this model is better than an intercept-only model<sup><a href="https://data.library.virginia.edu/a-beginners-guide-to-marginal-effects/#fn1">1</a></sup>. Exponentiating the coefficients gives us estimated odds ratios. For example, exponentiating the coefficient for the "black" variable returns <code>exp(0.718) = 2.05</code>. All else being equal, we estimate the odds of "black" subjects having diabetes is about two times higher than those who are not "black". Likewise, all else being equal, we estimate the odds of developing diabetes increases by about 6% every year as you get older: <code>exp(0.06) = 1.06</code>. The effect of "female" is uncertain.</p>
+<p>Now let's find the average marginal effects of the "black" and "female" predictors. The following reproduces section 6.2 of the paper.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>mfx3 <span class="ot">&lt;-</span> <span class="fu">margins</span>(m2, <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"female"</span>))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mfx3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["factor"],"name":[1],"type":["chr"],"align":["left"]},{"label":["AME"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["SE"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["z"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["p"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["lower"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["upper"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"black1","2":"0.040092","3":"0.008706","4":"4.605","5":"0.000004117","6":"0.023030","7":"0.05715","_rn_":"1","_row":"black1"},{"1":"female1","2":"0.006799","3":"0.004128","4":"1.647","5":"0.099579394","6":"-0.001292","7":"0.01489","_rn_":"2","_row":"female1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>The quick interpretation of the output is that subjects of race "black" have a probability of developing diabetes that is about 2 – 6% higher than those who are "not black". This comes from the confidence interval reported in the last two columns. Females may have a slightly higher chance of developing diabetes than males, but the confidence interval dips below 0. It's possible they have a slightly lower chance than males. We're not sure based on the data.</p>
+<p>So how were these marginal effects calculated? Since "black" and "female" are both factor variables they were handled differently than the "x" variable in our toy data above. If a predictor is numeric, then we take the derivative of the response with respect to the numeric predictor as demonstrated above. However if our predictors are factors, then we calculate what are called "first-differences". This means we calculate the predicted outcome when a factor is set to a given level and then subtract the predicted outcome when the factor is set to its baseline level. We do this for all subjects and take the mean. Let's demonstrate by doing it "manually".</p>
+<p>First we treat all subjects in the data as if they were "black" and predict the probability of developing diabetes for each person. We save the results into a vector named "black_eff".</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>black_eff <span class="ot">&lt;-</span> <span class="fu">predict</span>(m2,</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">black=</span><span class="fu">factor</span>(<span class="dv">1</span>),</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">female=</span>nhanes2f<span class="sc">$</span>female,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">age=</span>nhanes2f<span class="sc">$</span>age), </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                     <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Next we treat all subjects as if they were "not black" and predict the probability of developing diabetes for each person. We save these results into a vector named "not_black_eff".</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>not_black_eff <span class="ot">&lt;-</span> <span class="fu">predict</span>(m2, </span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">black=</span><span class="fu">factor</span>(<span class="dv">0</span>),</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">female=</span>nhanes2f<span class="sc">$</span>female,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                                              <span class="at">age=</span>nhanes2f<span class="sc">$</span>age),</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">type =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally we calculate the difference in these 10,335 probabilities and take the mean:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(black_eff <span class="sc">-</span> not_black_eff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.04009</code></pre>
+</div>
+</div>
+<p>And there we have the average marginal effect. (The same exercise can be done for the "female" predictor which we leave for the interested reader.)</p>
+<p>Once again it's worth asking if this is useful? Williams states in his paper that "averages can obscure differences in effects across cases." If we look at the summary of the differences we see a fairly large range of effects. As Williams notes, the largest value (0.108) is 20 times bigger than the smallest value (0.006).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(black_eff <span class="sc">-</span> not_black_eff)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+0.00561 0.01125 0.03184 0.04009 0.06484 0.10787 </code></pre>
+</div>
+</div>
+<p>Looking at a histogram of the effects also makes us think twice about using a mean to summarize the data.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(black_eff <span class="sc">-</span> not_black_eff, <span class="at">main =</span> <span class="st">"Distribution of First-Differences"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="beginner_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>As before a better approach may be to examine average marginal effects at <em>representative values</em>. The previously estimated "black" AME of 0.04 was for all ages. It's probably advisable to break that down for various ages. Williams does so for ages 20 to 70 in steps of 10. Below we reproduce the output from the paper, which is in section 6.3. To set the ages we use the <code>at</code> argument.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>mfx4 <span class="ot">&lt;-</span> <span class="fu">margins</span>(<span class="at">model =</span> m2, <span class="at">variables =</span> <span class="fu">c</span>(<span class="st">"black"</span>, <span class="st">"female"</span>), </span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">at =</span> <span class="fu">list</span>(<span class="at">age =</span> <span class="fu">seq</span>(<span class="dv">20</span>,<span class="dv">70</span>,<span class="dv">10</span>)))</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(mfx4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["factor"],"name":[1],"type":["chr"],"align":["left"]},{"label":["age"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["AME"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["SE"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["z"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["p"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["lower"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["upper"],"name":[8],"type":["dbl"],"align":["right"]}],"data":[{"1":"black1","2":"20","3":"0.0060899","4":"0.0016303","5":"3.736","6":"0.000187338","7":"0.0028946","8":"0.009285","_rn_":"1"},{"1":"black1","2":"30","3":"0.0108784","4":"0.0027129","5":"4.010","6":"0.000060759","7":"0.0055612","8":"0.016196","_rn_":"2"},{"1":"black1","2":"40","3":"0.0192101","4":"0.0045185","5":"4.251","6":"0.000021237","7":"0.0103541","8":"0.028066","_rn_":"3"},{"1":"black1","2":"50","3":"0.0332459","4":"0.0074944","5":"4.436","6":"0.000009161","7":"0.0185570","8":"0.047935","_rn_":"4"},{"1":"black1","2":"60","3":"0.0555816","4":"0.0121843","5":"4.562","6":"0.000005073","7":"0.0317008","8":"0.079462","_rn_":"5"},{"1":"black1","2":"70","3":"0.0877803","4":"0.0187859","5":"4.673","6":"0.000002973","7":"0.0509606","8":"0.124600","_rn_":"6"},{"1":"female1","2":"20","3":"0.0009933","4":"0.0006215","5":"1.598","6":"0.109975901","7":"-0.0002248","8":"0.002211","_rn_":"7"},{"1":"female1","2":"30","3":"0.0017800","4":"0.0010993","5":"1.619","6":"0.105408700","7":"-0.0003746","8":"0.003935","_rn_":"8"},{"1":"female1","2":"40","3":"0.0031610","4":"0.0019339","5":"1.634","6":"0.102154238","7":"-0.0006294","8":"0.006951","_rn_":"9"},{"1":"female1","2":"50","3":"0.0055253","4":"0.0033615","5":"1.644","6":"0.100232184","7":"-0.0010630","8":"0.012114","_rn_":"10"},{"1":"female1","2":"60","3":"0.0093981","4":"0.0057063","5":"1.647","6":"0.099564233","7":"-0.0017860","8":"0.020582","_rn_":"11"},{"1":"female1","2":"70","3":"0.0152754","4":"0.0092827","5":"1.646","6":"0.099851233","7":"-0.0029184","8":"0.033469","_rn_":"12"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>Now we get a better sense of how race "black" affects the probability of developing diabetes, according to our model. We see that it increases as age increases. It's less than 1% at age 20, but over 8% by age 70. This is to be expected given our original model summary. The age effect was large relative to its standard error and positive. But now we have estimated "black" effects at various age levels which is more informative than the model summary by itself.</p>
+<p>Also displayed are the various "female" effects, none of which are very big or all that different from 0. This is also not surprising given the model summary. The female coefficient was small and uncertain.</p>
+<p>If you ran this last line of code you may have noticed it took a little longer to run. That's because the "first-differences" were calculated six times. If you look at the dimensions of the mfx4 object you'll see it has 62,010 rows. The exact same process we demonstrated above is carried out <em>for each age level</em>. Here's how to replicate the "black1" age 70 average marginal effect "by hand". This time everyone is set to age 70 in addition to being set to "black" and then "not black".</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>b70 <span class="ot">&lt;-</span> <span class="fu">predict</span>(m2, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">black=</span><span class="fu">factor</span>(<span class="dv">1</span>),</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">female=</span>nhanes2f<span class="sc">$</span>female, </span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">age=</span><span class="dv">70</span>),</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>nb70 <span class="ot">&lt;-</span> <span class="fu">predict</span>(m2, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">black=</span><span class="fu">factor</span>(<span class="dv">0</span>),</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">female=</span>nhanes2f<span class="sc">$</span>female,</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">age=</span><span class="dv">70</span>),</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>               <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(b70 <span class="sc">-</span> nb70)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.08778</code></pre>
+</div>
+</div>
+<p>This brings up another consideration: treating subjects who reported their race as "black" as if they were "not black", and vice versa. Or treating all subjects as if they're age 70. And then treating all subjects as if they're age 20. Williams briefly mentions that some people "are not convinced" of this approach (p.326). However it's important to realize this is precisely what happens when you calculate average marginal effects.</p>
+<p>If that bothers you, one alternative is <em>estimated marginal means</em>. With marginal means, we use our model to estimate means with predictors set to certain values.<sup><a href="https://data.library.virginia.edu/a-beginners-guide-to-marginal-effects/#fn2">2</a></sup> For example, let's say we're interested in how the "black" race level changes the probability of developing diabetes for females at age 70. Previously, using marginal effects, we would set all 10,335 subjects to "black", "female" and age 70, and then all subjects to "not black", "female" and age 70, and take the mean difference in predicted probabilities. Now we simply use our model to make two predictions and take the difference. Here's one way to do that by hand.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(m2, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">black =</span> <span class="st">"1"</span>, </span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">female =</span> <span class="st">"1"</span>, </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">age =</span> <span class="dv">70</span>),</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">predict</span>(m2, <span class="at">newdata =</span> <span class="fu">data.frame</span>(<span class="at">black =</span> <span class="st">"0"</span>, </span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">female =</span> <span class="st">"1"</span>, </span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>                                       <span class="at">age =</span> <span class="dv">70</span>),</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">type =</span> <span class="st">"response"</span>)</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">-</span> p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      1 
+0.09232 </code></pre>
+</div>
+</div>
+<p>There's an absolute difference of 0.09 in probability of developing diabetes for "black" versus "not black" for age 70 females. Fortunately the emmeans package in R can do this for us and return associated standard errors and confidence intervals. Below we load the emmeans package and then use the <code>emmeans()</code> function on our model. The <code>specs</code> argument specifies which variable we want to estimate multiple "means" for. In this case we want two: one for "black" and one for "not black". We also specify we want to calculate the probabilities at age = 70 and female = "1". Finally we set <code>regrid = "response"</code> to ensure predictions are on the "response" scale (ie, probabilities).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">emmeans</span>(m2, <span class="at">specs =</span> <span class="st">"black"</span>, </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">at =</span> <span class="fu">list</span>(<span class="at">age =</span> <span class="dv">70</span>, <span class="at">female =</span> <span class="st">"1"</span>),</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">regrid =</span> <span class="st">"response"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> black  prob      SE  df asymp.LCL asymp.UCL
+ 0     0.110 0.00732 Inf    0.0959     0.125
+ 1     0.203 0.02097 Inf    0.1615     0.244
+
+Confidence level used: 0.95 </code></pre>
+</div>
+</div>
+<p>This returns the two predicted probabilities for black = "0" and black = "1". To get the difference in the probabilities we can "pipe" the result into the emmeans function <code>contrast()</code>, and then pipe that result into <code>confint()</code> to get 95% confidence intervals. The argument <code>method = "revpairwise"</code> simply says to calculate the difference in "black" levels as 1 – 0 and instead 0 – 1.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">emmeans</span>(m2, <span class="at">specs =</span> <span class="st">"black"</span>,</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">at =</span> <span class="fu">list</span>(<span class="at">age =</span> <span class="dv">70</span>, <span class="at">female =</span> <span class="st">"1"</span>),</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">regrid =</span> <span class="st">"response"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">contrast</span>(<span class="at">method =</span> <span class="st">"revpairwise"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">confint</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["contrast"],"name":[1],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["SE"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["df"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["asymp.LCL"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["asymp.UCL"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"black1 - black0","2":"0.09232","3":"0.01982","4":"Inf","5":"0.05347","6":"0.1312","_rn_":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>Now we get the estimated difference in probabilities along with a standard error of the difference and a confidence interval. It appears our data is consistent with a "real" difference in probability between 0.05 to 0.13.</p>
+<p>We could also calculate the difference in probabilties for males and females by using the <code>by</code> argument as follows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">emmeans</span>(m2, <span class="at">specs =</span> <span class="st">"black"</span>, <span class="at">by =</span> <span class="st">"female"</span>,</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">at =</span> <span class="fu">list</span>(<span class="at">age =</span> <span class="dv">70</span>),</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">regrid =</span> <span class="st">"response"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">contrast</span>(<span class="at">method =</span> <span class="st">"revpairwise"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">confint</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["contrast"],"name":[1],"type":["fct"],"align":["left"]},{"label":["female"],"name":[2],"type":["fct"],"align":["left"]},{"label":["estimate"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["SE"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["df"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["asymp.LCL"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["asymp.UCL"],"name":[7],"type":["dbl"],"align":["right"]}],"data":[{"1":"black1 - black0","2":"0","3":"0.08277","4":"0.01812","5":"Inf","6":"0.04726","7":"0.1183","_rn_":"1"},{"1":"black1 - black0","2":"1","3":"0.09232","4":"0.01982","5":"Inf","6":"0.05347","7":"0.1312","_rn_":"2"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>If we don't specify "female" in either the <code>by</code> or <code>at</code> arguments, the result is <em>averaged</em> over "female". In other words we use our model to calculate probability by plugging in the proportion of females in our data. In this case that's 5426/10,335 = 0.525.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">emmeans</span>(m2, <span class="at">specs =</span> <span class="st">"black"</span>,</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">at =</span> <span class="fu">list</span>(<span class="at">age =</span> <span class="dv">70</span>),</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">regrid =</span> <span class="st">"response"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">contrast</span>(<span class="at">method =</span> <span class="st">"revpairwise"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">confint</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["contrast"],"name":[1],"type":["chr"],"align":["left"]},{"label":["estimate"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["SE"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["df"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["asymp.LCL"],"name":[5],"type":["dbl"],"align":["right"]},{"label":["asymp.UCL"],"name":[6],"type":["dbl"],"align":["right"]}],"data":[{"1":"black1 - black0","2":"0.08754","3":"0.01874","4":"Inf","5":"0.05081","6":"0.1243","_rn_":"1"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<p>The complication now is that we made estimates for a subject who is 0.525 female. Some might argue that's not realistic. You're either female or not. Others might say it's not relevant since were more interested in the effect of "black" and not a difference in specific predictions. Either way, this is another consideration to be aware of.</p>
+<p>Hopefully you now have a better understanding of marginal effects and marginal means. For more information see the vignettes that accompany the margins and emmeans packages.</p>
+<p><strong>References</strong></p>
+<ul>
+<li><p>Thomas J. Leeper (2021). margins: Marginal Effects for Model Objects. R package version 0.3.26. <a href="https://cran.r-project.org/package=margins">https://CRAN.R-project.org/package=margins</a></p></li>
+<li><p>Russell V. Lenth (2021). emmeans: Estimated Marginal Means, aka Least-Squares Means. R package version 1.7.3. <a href="https://cran.r-project.org/package=emmeans">https://CRAN.R-project.org/package=emmeans</a></p></li>
+<li><p>R Core Team (2021). R: A language and environment for statistical computing. R Foundation for Statistical Computing, Vienna, Austria. URL <a href="https://www.r-project.org/">https://www.R-project.org/</a>.</p></li>
+<li><p>StataCorp. 2021. Stata 17 Base Reference Manual. College Station, TX: Stata Press.</p></li>
+<li><p>Richard Williams (2012). <em>Using the margins command to estimate and interpret adjusted predictions and marginal effects</em>. The Stata Journal, 12, Number 2, pp.&nbsp;308–331.</p></li>
+</ul>
+<hr>
+<ol type="1">
+<li><p>This doesn't necessarily mean it's a good model. It just means it's better than a model that just has an intercept. An intercept-only model is the same as using the proportion of the dependent variable as your predicted probability. In our data, 0.048 subjects have diabetes. An intercept-only model would predict everyone has a probability of 0.048 of developing diabetes</p></li>
+<li><p>"Means" in this case is actually more like "expected value". Out logit model returns predicted probabilities, not means. But the probabilities are based on "mean" log odds (ie, logit).<a href="https://data.library.virginia.edu/a-beginners-guide-to-marginal-effects/#fnref2">↩︎</a></p></li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>sessioninfo<span class="sc">::</span><span class="fu">session_info</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>─ Session info ───────────────────────────────────────────────────────────────
+ setting  value
+ version  R version 4.3.0 (2023-04-21)
+ os       macOS Ventura 13.3.1
+ system   x86_64, darwin20
+ ui       X11
+ language (EN)
+ collate  en_US.UTF-8
+ ctype    en_US.UTF-8
+ tz       America/New_York
+ date     2023-04-26
+ pandoc   3.1.2 @ /usr/local/bin/ (via rmarkdown)
+
+─ Packages ───────────────────────────────────────────────────────────────────
+ package         * version date (UTC) lib source
+ cli               3.6.1   2023-03-23 [1] CRAN (R 4.3.0)
+ curl              5.0.0   2023-01-12 [1] CRAN (R 4.3.0)
+ data.table        1.14.8  2023-02-17 [1] CRAN (R 4.3.0)
+ digest            0.6.31  2022-12-11 [1] CRAN (R 4.3.0)
+ emmeans         * 1.8.5   2023-03-08 [1] CRAN (R 4.3.0)
+ estimability      1.4.1   2022-08-05 [1] CRAN (R 4.3.0)
+ evaluate          0.20    2023-01-17 [1] CRAN (R 4.3.0)
+ fansi             1.0.4   2023-01-22 [1] CRAN (R 4.3.0)
+ fastmap           1.1.1   2023-02-24 [1] CRAN (R 4.3.0)
+ forcats           1.0.0   2023-01-29 [1] CRAN (R 4.3.0)
+ generics          0.1.3   2022-07-05 [1] CRAN (R 4.3.0)
+ glue              1.6.2   2022-02-24 [1] CRAN (R 4.3.0)
+ haven           * 2.5.2   2023-02-28 [1] CRAN (R 4.3.0)
+ hms               1.1.3   2023-03-21 [1] CRAN (R 4.3.0)
+ htmltools         0.5.5   2023-03-23 [1] CRAN (R 4.3.0)
+ jsonlite          1.8.4   2022-12-06 [1] CRAN (R 4.3.0)
+ knitr             1.42    2023-01-25 [1] CRAN (R 4.3.0)
+ lifecycle         1.0.3   2022-10-07 [1] CRAN (R 4.3.0)
+ magrittr          2.0.3   2022-03-30 [1] CRAN (R 4.3.0)
+ marginaleffects * 0.11.1  2023-03-31 [1] CRAN (R 4.3.0)
+ margins         * 0.3.26  2021-01-22 [1] CRAN (R 4.3.0)
+ MASS              7.3-59  2023-04-21 [2] CRAN (R 4.3.0)
+ mvtnorm           1.1-3   2021-10-08 [1] CRAN (R 4.3.0)
+ pillar            1.9.0   2023-03-22 [1] CRAN (R 4.3.0)
+ pkgconfig         2.0.3   2019-09-22 [1] CRAN (R 4.3.0)
+ prediction        0.3.14  2019-06-17 [1] CRAN (R 4.3.0)
+ R6                2.5.1   2021-08-19 [1] CRAN (R 4.3.0)
+ Rcpp              1.0.10  2023-01-22 [1] CRAN (R 4.3.0)
+ readr             2.1.4   2023-02-10 [1] CRAN (R 4.3.0)
+ rlang             1.1.0   2023-03-14 [1] CRAN (R 4.3.0)
+ rmarkdown         2.21    2023-03-26 [1] CRAN (R 4.3.0)
+ rstudioapi        0.14    2022-08-22 [1] CRAN (R 4.3.0)
+ sessioninfo       1.2.2   2021-12-06 [1] CRAN (R 4.3.0)
+ tibble            3.2.1   2023-03-20 [1] CRAN (R 4.3.0)
+ tzdb              0.3.0   2022-03-28 [1] CRAN (R 4.3.0)
+ utf8              1.2.3   2023-01-31 [1] CRAN (R 4.3.0)
+ vctrs             0.6.2   2023-04-19 [1] CRAN (R 4.3.0)
+ xfun              0.39    2023-04-20 [1] CRAN (R 4.3.0)
+ yaml              2.3.7   2023-01-23 [1] CRAN (R 4.3.0)
+
+ [1] /Users/marcoe02/.Rlib
+ [2] /Library/Frameworks/R.framework/Versions/4.3-x86_64/Resources/library
+
+──────────────────────────────────────────────────────────────────────────────</code></pre>
+</div>
+</div>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
