@@ -1,0 +1,277 @@
+---
+title: "XXX"
+format:
+  html:
+    df-print: paged
+---
+
+source:
+
+-   https://youtu.be/\_okuMw4JFfU
+-   XXX
+
+## Setup environment
+
+```{r}
+#| output: false
+library(tidyverse)
+library(emmeans)
+library(marginaleffects)
+library(ggeffects)
+library(sjPlot)
+library(performance)
+```
+
+## One categorical predictor
+
+```{r}
+d <- mtcars %>%
+  mutate(cyl = factor(cyl),
+         am = factor(am),
+         gear = factor(gear))
+
+m1 = lm(mpg ~ cyl, d)
+
+summary(m1)
+```
+
+```{r}
+emmeans(m1, ~ cyl)
+```
+
+```{r}
+emmeans(m1, ~ cyl) %>% plot()
+```
+
+```{r}
+emmeans(m1, pairwise ~ cyl)
+```
+
+```{r}
+emmeans(m1, pairwise ~ cyl, infer = TRUE)
+```
+
+```{r}
+pairs(emmeans(m1, ~ cyl))
+```
+
+```{r}
+contrast(emmeans(m1, ~ cyl), "pairwise")
+```
+
+```{r}
+emmeans(m1, pairwise ~ cyl) %>% plot(comparisons = TRUE)
+```
+
+emmeans = estimated marginal means
+
+estimated -\> means are estimated by averaging fitted values/model predictions, not the input data
+
+marginal -\> means are estimated by averaging a group/margin of fitted values
+
+means -\> averages (in the general sense)
+
+For a categorical predictor, each category is a margin.
+
+```{r}
+ref_grid(m1)
+```
+
+For a numeric predictor, its mean is the margin.
+
+```{r}
+m2 = lm(mpg ~ gear + am + hp, d)
+
+ref_grid(m2)
+```
+
+We can estimate means for each margin/point in the reference grid.
+
+## One numerical predictor
+
+```{r}
+m3 <- lm(mpg ~ hp, d)
+
+summary(m3)
+```
+
+```{r}
+ref_grid(m3)
+```
+
+```{r}
+emmeans(m3, ~ hp)
+```
+
+```{r}
+predict(m3, newdata = ref_grid(m3))
+```
+
+```{r}
+predict(m3, newdata = list(hp = mean(d$hp)))
+```
+
+Reduce covariate to its range:
+
+```{r}
+ref_grid(m3, ~ hp, cov.reduce = range)
+```
+
+```{r}
+emmeans(m3, ~ hp, cov.reduce = range)
+```
+
+```{r}
+predict(m3, newdata = list(hp = c(52, 335)))
+```
+
+```{r}
+d %>% filter(hp %in% range(hp)) %>% rownames_to_column() %>% select(rowname, mpg, hp)
+```
+
+```{r}
+predictions(m3, newdata = datagrid(hp = range))
+```
+
+```{r}
+predictions(m3, newdata = datagridcf(hp = range), by = "hp")
+```
+
+```{r}
+m4 <- lm(mpg ~ poly(hp, 2), d)
+
+plot_predictions(m4, condition = "hp")
+```
+
+```{r}
+plot_model(m4, type = "pred", show.data = TRUE)
+```
+
+```{r}
+emmeans(m4, ~ hp, at = list(hp = c(100, 200, 300))) %>% plot(comparisons = TRUE)
+```
+
+```{r}
+emmeans(m4, pairwise ~ hp, at = list(hp = c(100, 200, 300)))
+```
+
+## One categorical + one numeric predictor
+
+```{r}
+library(ISLR)
+
+set.seed(1)
+
+salary <- Wage %>%
+  group_by(jobclass) %>% 
+  sample_n(50)
+
+salary
+```
+
+```{r}
+m <- lm(wage ~ jobclass + age, salary)
+
+summary(m)
+```
+
+```{r}
+m.no_age = lm(wage ~ jobclass, salary)
+
+compare_performance(m, m.no_age)
+```
+
+```{r}
+ref_grid(m)
+```
+
+```{r}
+emmeans(m, ~ jobclass) # at average age of 40.8
+```
+
+```{r}
+emmeans(m,
+        pairwise ~ jobclass | age,
+        at = list(age = c(25, mean(salary$age), 65)))
+```
+
+```{r}
+emmeans(m,
+        pairwise ~ age | jobclass,
+        at = list(age = c(25, mean(salary$age), 65)))
+```
+
+## One categorical + one categorical predictor
+
+```{r}
+m <- lm(mpg ~ am + cyl, d)
+
+summary(m)
+```
+
+```{r}
+ref_grid(m)
+```
+
+```{r}
+emmeans(m, pairwise ~ cyl)
+```
+
+What does `Results are averaged over the levels of: am` means?
+
+```{r}
+emmeans(m, pairwise ~ cyl | am)
+```
+
+```{r}
+mean(c(24.8, 27.4))
+mean(c(18.6, 21.2))
+mean(c(14.7, 17.3))
+```
+
+For a numeric predictor, emmeans are estimated for the mean of that covariate.
+
+For a categorical predictor, emmeans are estimated by calculating the average of the emmeans of each category.
+
+## Two numeric predictors
+
+```{r}
+m <- lm(mpg ~ hp + wt, d)
+
+summary(m)
+```
+
+```{r}
+ref_grid(m)
+```
+
+```{r}
+emmeans(m, ~ wt | hp, cov.reduce = range)
+```
+
+```{r}
+# without interactions
+lm(mpg ~ hp + wt, d) %>%
+  plot_model(type = "pred", terms = c("wt", "hp[52,335]"))
+```
+
+```{r}
+lm(mpg ~ hp + wt, d) %>%
+  emmeans(pairwise ~ wt | hp, cov.reduce = range)
+```
+
+```{r}
+# with interactions
+lm(mpg ~ hp * wt, d) %>%
+  plot_model(type = "pred", terms = c("wt", "hp[52,335]"))
+```
+
+```{r}
+lm(mpg ~ hp * wt, d) %>%
+  emmeans(pairwise ~ wt | hp, cov.reduce = range)
+```
+
+```{r}
+#| echo: false
+sessioninfo::session_info()
+```
