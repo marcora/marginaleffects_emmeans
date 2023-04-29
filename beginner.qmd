@@ -49,6 +49,14 @@ mfx <- margins(m, variables = "x")
 summary(mfx)
 ```
 
+```{r}
+avg_slopes(m, variables = "x")
+```
+
+```{r}
+emtrends(m, ~ x, var = "x")
+```
+
 What are we looking at? What does -0.468 mean? It's labeled AME, so it's the average marginal effect. But what does it mean exactly?
 
 To help answer this let's look at the mfx object we created. It's a date frame with eight columns and the same number of rows as our data set.
@@ -139,9 +147,23 @@ And there it is, our *average marginal effect*. It is literally the average of t
 A better approach may be to examine marginal effects at *representative values*. For example, what if we were interested in the marginal effects at x = -1 and x = 6? We can use the `at` argument to specify at which x values to calculate the marginal effects. These need to specified as a list object.
 
 ```{r}
-mfx2 <- margins(m, variables = "x", 
+mfx2 <- margins(m,
+                variables = "x", 
                 at = list(x = c(-1, 6)))
 summary(mfx2)
+```
+
+```{r}
+slopes(m,
+       variables = "x",
+       newdata = datagrid(x = c(-1, 6)))
+```
+
+```{r}
+emtrends(m,
+         specs = "x",
+         var = "x",
+         at = list(x = c(-1, 6)))
 ```
 
 Now we have two measures of the effect of "x". When x = -1, we can imagine a tangent line with a positive slope of about 4. When x = 6, we can imagine a tangent line with a negative slope of about -3.2. The summary output provides 95% confidence intervals on these estimates in the "lower" and "upper" columns.
@@ -169,8 +191,9 @@ The variables we have are as follows:
 Now let's reproduce some results in the paper. First we model the presence of diabetes as function of "black", "female", and "age" using binary logistic regression.
 
 ```{r}
-m2 <- glm(diabetes ~ black + female + age, 
-         data = nhanes2f, family = binomial)
+m2 <- glm(diabetes ~ black + female + age,
+          data = nhanes2f,
+          family = binomial)
 
 summary(m2)
 ```
@@ -183,6 +206,22 @@ Now let's find the average marginal effects of the "black" and "female" predicto
 mfx3 <- margins(m2, variables = c("black", "female"))
 
 summary(mfx3)
+```
+
+```{r}
+avg_comparisons(m2, variables = c("black", "female"))
+```
+
+```{r}
+emmeans(m2,
+        trt.vs.ctrl ~ black,
+        regrid = "response")
+```
+
+```{r}
+emmeans(m2,
+        trt.vs.ctrl ~ female,
+        regrid = "response")
 ```
 
 The quick interpretation of the output is that subjects of race "black" have a probability of developing diabetes that is about 2 -- 6% higher than those who are "not black". This comes from the confidence interval reported in the last two columns. Females may have a slightly higher chance of developing diabetes than males, but the confidence interval dips below 0. It's possible they have a slightly lower chance than males. We're not sure based on the data.
@@ -232,10 +271,31 @@ hist(black_eff - not_black_eff, main = "Distribution of First-Differences")
 As before a better approach may be to examine average marginal effects at *representative values*. The previously estimated "black" AME of 0.04 was for all ages. It's probably advisable to break that down for various ages. Williams does so for ages 20 to 70 in steps of 10. Below we reproduce the output from the paper, which is in section 6.3. To set the ages we use the `at` argument.
 
 ```{r}
-mfx4 <- margins(model = m2, variables = c("black", "female"), 
-        at = list(age = seq(20,70,10)))
+mfx4 <- margins(model = m2,
+                variables = c("black", "female"), 
+                at = list(age = seq(20,70,10)))
 
 summary(mfx4)
+```
+
+```{r}
+comparisons(m2,
+            variables = c("black", "female"), 
+            newdata = datagrid(age = seq(20,70,10)))
+```
+
+```{r}
+emmeans(m2,
+        trt.vs.ctrl ~ black | age, 
+        at = list(age = seq(20,70,10)),
+        regrid = "response")
+```
+
+```{r}
+emmeans(m2,
+        trt.vs.ctrl ~ female | age, 
+        at = list(age = seq(20,70,10)),
+        regrid = "response")
 ```
 
 Now we get a better sense of how race "black" affects the probability of developing diabetes, according to our model. We see that it increases as age increases. It's less than 1% at age 20, but over 8% by age 70. This is to be expected given our original model summary. The age effect was large relative to its standard error and positive. But now we have estimated "black" effects at various age levels which is more informative than the model summary by itself.
@@ -279,7 +339,8 @@ p1 - p2
 There's an absolute difference of 0.09 in probability of developing diabetes for "black" versus "not black" for age 70 females. Fortunately the `emmeans` package in R can do this for us and return associated standard errors and confidence intervals. Below we load the `emmeans` package and then use the `emmeans()` function on our model. The `specs` argument specifies which variable we want to estimate multiple "means" for. In this case we want two: one for "black" and one for "not black". We also specify we want to calculate the probabilities at age = 70 and female = "1". Finally we set `regrid = "response"` to ensure predictions are on the "response" scale (ie, probabilities).
 
 ```{r}
-emmeans(m2, specs = "black", 
+emmeans(m2,
+        specs = "black", 
         at = list(age = 70, female = "1"),
         regrid = "response")
 ```
@@ -287,7 +348,8 @@ emmeans(m2, specs = "black",
 This returns the two predicted probabilities for black = "0" and black = "1". To get the difference in the probabilities we can "pipe" the result into the `emmeans` function `contrast()`, and then pipe that result into `confint()` to get 95% confidence intervals. The argument `method = "revpairwise"` simply says to calculate the difference in "black" levels as 1 -- 0 and instead 0 -- 1.
 
 ```{r}
-emmeans(m2, specs = "black",
+emmeans(m2,
+        specs = "black",
         at = list(age = 70, female = "1"),
         regrid = "response") |>
   contrast(method = "revpairwise") |>
@@ -299,7 +361,9 @@ Now we get the estimated difference in probabilities along with a standard error
 We could also calculate the difference in probabilties for males and females by using the `by` argument as follows:
 
 ```{r}
-emmeans(m2, specs = "black", by = "female",
+emmeans(m2,
+        specs = "black",
+        by = "female",
         at = list(age = 70),
         regrid = "response") |>
   contrast(method = "revpairwise") |>
